@@ -27,7 +27,8 @@ curl -X POST -H "Content-Type: application/json" --data '{
     "database.server.name": "pg_server",
     "slot.name": "debezium",
     "plugin.name": "pgoutput",
-    "topic.prefix": "pg"
+    "topic.prefix": "pg",
+    "snapshot.mode": "always"
   }
 }' http://localhost:8083/connectors
 
@@ -75,13 +76,14 @@ curl -X POST -H "Content-Type: application/json" --data '{
   "name": "mongo-connector",
   "config": {
     "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
-    "tasks.max": "1",
-    "mongodb.connection.string": "mongodb://user:pass@mongodb:27017",
-    "mongodb.hosts": "mongodb:27017",
-    "mongodb.name": "mongo_server",
+    "mongodb.connection.string": "mongodb://user:pass@mongo1:27017,mongo2:27018/?replicaSet=rs0",
+    "mongodb.name": "my-mongodb",
     "mongodb.user": "user",
     "mongodb.password": "pass",
-    "database.include.list": "mydb",
-    "topic.prefix": "mongo"
+    "database.history.kafka.bootstrap.servers": "kafka:9092",
+    "database.history.kafka.topic": "schema-changes.mongodb",
+    "capture.mode": "change_streams",
+    "topic.prefix": "mongo",
+    "snapshot.mode": "always"
   }
 }' http://localhost:8083/connectors
