@@ -1,19 +1,6 @@
 #!/bin/bash
 
 # Adicionando conector para Postgres
-# Parâmetros do JSON:
-# - name: Nome do conector
-# - config.connector.class: Classe do conector Postgres do Debezium
-# - config.tasks.max: Número máximo de tarefas paralelas
-# - config.database.hostname: Hostname do banco de dados
-# - config.database.port: Porta do banco de dados
-# - config.database.user: Usuário do banco
-# - config.database.password: Senha do banco
-# - config.database.dbname: Nome do banco de dados
-# - config.database.server.name: Nome lógico do servidor
-# - config.slot.name: Nome do slot de replicação
-# - config.plugin.name: Plugin de publicação do Postgres
-# - config.topic.prefix: Prefixo dos tópicos Kafka
 curl -X POST -H "Content-Type: application/json" --data '{
   "name": "postgres-connector",
   "config": {
@@ -28,28 +15,11 @@ curl -X POST -H "Content-Type: application/json" --data '{
     "slot.name": "debezium",
     "plugin.name": "pgoutput",
     "topic.prefix": "pg",
-    "snapshot.mode": "always"
+    "snapshot.mode": "no_data"
   }
 }' http://localhost:8083/connectors
 
 # Adicionando conector para MySQL
-# Parâmetros do JSON:
-# - name: Nome do conector
-# - config.connector.class: Classe do conector MySQL do Debezium
-# - config.tasks.max: Número máximo de tarefas paralelas
-# - config.database.hostname: Hostname do banco de dados
-# - config.database.port: Porta do banco de dados
-# - config.database.user: Usuário do banco
-# - config.database.password: Senha do banco
-# - config.database.server.name: Nome lógico do servidor
-# - config.database.include.list: Lista de bancos a serem monitorados
-# - config.topic.prefix: Prefixo dos tópicos Kafka
-# - config.snapshot.mode: Modo de snapshot inicial
-# - config.database.server.id: ID único do servidor
-# - config.schema.history.internal.kafka.topic: Tópico para histórico de schema
-# - config.schema.history.internal.kafka.bootstrap.servers: Endereço do broker Kafka
-# - config.schema.history.internal.skip.unparseable.ddl: Pular DDL não analisável
-# - config.schema.history.internal.recover: Recuperar histórico em caso de falha
 curl -X POST -H "Content-Type: application/json" --data '{
   "name": "mysql-connector",
   "config": {
@@ -71,7 +41,7 @@ curl -X POST -H "Content-Type: application/json" --data '{
   }
 }' http://localhost:8083/connectors
 
-# Adding connector for MongoDB
+# Adiciona conector para MongoDB
 curl -X POST -H "Content-Type: application/json" --data '{
   "name": "mongo-connector",
   "config": {
@@ -84,6 +54,6 @@ curl -X POST -H "Content-Type: application/json" --data '{
     "database.history.kafka.topic": "schema-changes.mongodb",
     "capture.mode": "change_streams",
     "topic.prefix": "mongo",
-    "snapshot.mode": "always"
+    "snapshot.mode": "no_data"
   }
 }' http://localhost:8083/connectors
